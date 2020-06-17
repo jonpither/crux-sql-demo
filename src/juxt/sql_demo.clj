@@ -10,17 +10,21 @@
 
 (ctn/disable-reload!)
 
-(defonce node (crux/start-node {:crux.node/topology ['crux.standalone/topology
-                                                     'crux.kv.rocksdb/kv-store]
-                                :crux.kv/db-dir "db"
-                                :crux.standalone/event-log-kv-store 'crux.kv.rocksdb/kv
-                                :crux.standalone/event-log-dir "event-log"}))
+
+(def config {:node {:crux.node/topology ['crux.standalone/topology
+                                         'crux.kv.rocksdb/kv-store]
+                    :crux.kv/db-dir "db"
+                    :crux.standalone/event-log-kv-store 'crux.kv.rocksdb/kv
+                    :crux.standalone/event-log-dir "event-log"}})
+
 
 (defmethod i/init-key :node [_ node-opts]
   (crux/start-node node-opts))
 
 (defmethod i/halt-key! :node [_ ^ICruxAPI node]
   (.close node))
+
+(ir/set-prep! (fn [] config))
 
 (defn crux-node []
   (:node system))
