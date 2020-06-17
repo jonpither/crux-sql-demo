@@ -6,9 +6,11 @@
             crux.kv.rocksdb
             crux.standalone
             [integrant.core :as i])
-  (:import crux.api.ICruxAPI))
+  (:import crux.api.ICruxAPI
+           java.util.UUID))
 
-(ctn/disable-reload!)
+;; ---------- Crux Config ----------- ;;
+
 
 
 (def config {:node {:crux.node/topology ['crux.standalone/topology
@@ -17,6 +19,11 @@
                     :crux.standalone/event-log-kv-store 'crux.kv.rocksdb/kv
                     :crux.standalone/event-log-dir "event-log"}})
 
+
+
+;; ---------- Integrant ----------- ;;
+
+(ctn/disable-reload!)
 
 (defmethod i/init-key :node [_ node-opts]
   (crux/start-node node-opts))
@@ -29,5 +36,22 @@
 (defn crux-node []
   (:node system))
 
-;; I want a minimal reset
-;; do everything via the REPL - have a cheat sheet
+
+
+;; ---------- Test People ----------- ;;
+
+(defn random-person []
+  {:crux.db/id (UUID/randomUUID)
+   :name (rand-nth ["Ivan" "Slata" "Sergei" "Antonina" "Yuri" "Dmitry" "Maria" "Denis"])
+   :last-name (rand-nth ["Ivanov" "Petrov" "Sidorov" "Kovalev" "Kuznetsov" "Voronoi"])
+   :sex (rand-nth [:male :female])
+   :age (rand-int 100)
+   :salary (rand-int 100000)})
+
+(comment
+  (let [node (crux-node)]
+    (doseq [p (take 100 (repeatedly random-person))]
+      (let [tx (crux/submit-tx node [[:crux.tx/put p]])]
+        (crux/await-tx node tx))))
+
+  (crux/q (crux/db (crux-node)) '{:find [?name] :where [[?e :name ?name]]}))
