@@ -5,6 +5,8 @@
             [crux.api :as crux]
             crux.kv.rocksdb
             crux.standalone
+            crux.calcite
+            [juxt.jdbc :refer [query]]
             [integrant.core :as i])
   (:import crux.api.ICruxAPI
            java.util.UUID))
@@ -14,7 +16,9 @@
 
 
 (def config {:node {:crux.node/topology ['crux.standalone/topology
-                                         'crux.kv.rocksdb/kv-store]
+                                         'crux.kv.rocksdb/kv-store
+                                         'crux.calcite/module]
+
                     :crux.kv/db-dir "db"
                     :crux.standalone/event-log-kv-store 'crux.kv.rocksdb/kv
                     :crux.standalone/event-log-dir "event-log"}})
@@ -54,4 +58,19 @@
       (let [tx (crux/submit-tx node [[:crux.tx/put p]])]
         (crux/await-tx node tx))))
 
-  (crux/q (crux/db (crux-node)) '{:find [?name] :where [[?e :name ?name]]}))
+  ;; can I type this?
+  (crux/q (crux/db (crux-node)) '{:find [?name] :where [[?e :name ?name]]})
+
+  ;; doc
+  (crux/submit-tx (crux-node) [[:crux.tx/put {:crux.db/id :crux.sql.schema/person
+                                              :crux.sql.table/name "person"
+                                              :crux.sql.table/query '{:find [?id ?name]
+                                                                      :where [[?id :name ?name]]}
+                                              :crux.sql.table/columns '{?id :keyword, ?name :varchar}}]])
+
+
+  (def conn (crux.calcite/jdbc-connection (crux-node)))
+  (map :name (query "SELECT NAME FROM PERSON" conn)))
+
+
+;;; ERROR FOR missing column def
