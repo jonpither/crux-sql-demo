@@ -1,6 +1,11 @@
 {:paths ["src"]
- :deps {juxt/crux-sql {:mvn/version "20.06-1.8.6-alpha-SNAPSHOT"}
+ :deps {
+
+        ;; Crux dependencies
         juxt/crux-rocksdb {:mvn/version "20.06-1.8.6-alpha-SNAPSHOT"}
+        juxt/crux-sql {:mvn/version "20.06-1.8.6-alpha-SNAPSHOT"}
+
+        ;; Other
         integrant {:mvn/version "0.8.0"}
         org.clojure/tools.namespace {:mvn/version "1.0.0"}
         integrant/repl {:mvn/version "0.3.1"}}}

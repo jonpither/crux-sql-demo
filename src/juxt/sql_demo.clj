@@ -42,6 +42,8 @@
 
 
 
+
+
 ;; ---------- Test People ----------- ;;
 
 (defn random-person []
@@ -58,15 +60,38 @@
       (let [tx (crux/submit-tx node [[:crux.tx/put p]])]
         (crux/await-tx node tx))))
 
-  ;; can I type this?
-  (crux/q (crux/db (crux-node)) '{:find [?name] :where [[?e :name ?name]]})
 
-  ;; doc
+
+
+
+
+
+
+
+
+
+
+
   (crux/submit-tx (crux-node) [[:crux.tx/put {:crux.db/id :crux.sql.schema/person
                                               :crux.sql.table/name "person"
                                               :crux.sql.table/query '{:find [?id ?name]
                                                                       :where [[?id :name ?name]]}
                                               :crux.sql.table/columns '{?id :keyword, ?name :varchar}}]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   (def conn (crux.calcite/jdbc-connection (crux-node)))
