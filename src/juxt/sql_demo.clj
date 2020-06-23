@@ -72,6 +72,54 @@
 
 
 
+
+
+
+
+  (crux/submit-tx (crux-node) [[:crux.tx/put (merge (random-person)
+                                                    {:name "Martin"})]])
+
+  (crux/submit-tx (crux-node) [[:crux.tx/put (merge (random-person)
+                                                    {:name "Marty"
+                                                     :crux.db/id #uuid "fc968009-d9c3-43fc-ac55-8a720f969cdf"})
+                                #inst "2000-01-20"]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(crux/submit-tx (crux-node) [[:crux.tx/put (merge (random-person)
+                                                    {:name "Jonathan"
+                                                     :crux.db/id #uuid "1d1bcef3-d505-4b7d-8c94-47723e4dc01a"})
+                                #inst "2000-01-20"]])
+
+  (crux/entity-history (crux/db (crux-node)) #uuid "1d1bcef3-d505-4b7d-8c94-47723e4dc01a" :asc)
+
+;; use inst code?
+
+
+
+
+
+
+
+
+
+
   (crux/submit-tx (crux-node) [[:crux.tx/put {:crux.db/id :crux.sql.schema/person
                                               :crux.sql.table/name "person"
                                               :crux.sql.table/query '{:find [?id ?name]
