@@ -1,3 +1,17 @@
 = Crux SQL Demo
 
-This is a demo project showcasing Crux SQL integration.
+This is a demo project showcasing Crux SQL integration, as can be
+found in the video:
+
+video::HEBL_ue2wbw[youtube]
+
+To play with the example code, start up a REPL against the `deps.edn`
+and `in-ns` to `juxt.sql-demo`. From there, run a system using
+`(reset)`, and execute the relevant source blocks with-in the
+namespace.
+
+More instructions on how to configure Crux to use SQL are on the
+https://github.com/juxt/crux/blob/master/crux-sql/README.adoc[module
+readme].
+
+We hope you find this demo source code useful!
