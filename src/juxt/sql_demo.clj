@@ -67,64 +67,14 @@
 
 
 
-
-
-
-
-
-
-
-
-
-  (crux/submit-tx (crux-node) [[:crux.tx/put (merge (random-person)
-                                                    {:name "Martin"})]])
-
-  (crux/submit-tx (crux-node) [[:crux.tx/put (merge (random-person)
-                                                    {:name "Marty"
-                                                     :crux.db/id #uuid "fc968009-d9c3-43fc-ac55-8a720f969cdf"})
-                                #inst "2000-01-20"]])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(crux/submit-tx (crux-node) [[:crux.tx/put (merge (random-person)
-                                                    {:name "Jonathan"
-                                                     :crux.db/id #uuid "1d1bcef3-d505-4b7d-8c94-47723e4dc01a"})
-                                #inst "2000-01-20"]])
-
-  (crux/entity-history (crux/db (crux-node)) #uuid "1d1bcef3-d505-4b7d-8c94-47723e4dc01a" :asc)
-
-;; use inst code?
-
-
-
-
-
-
-
-
-
+  ;; ---------- Table Schema ----------- ;;
 
   (crux/submit-tx (crux-node) [[:crux.tx/put {:crux.db/id :crux.sql.schema/person
                                               :crux.sql.table/name "person"
-                                              :crux.sql.table/query '{:find [?id ?name]
-                                                                      :where [[?id :name ?name]]}
-                                              :crux.sql.table/columns '{?id :keyword, ?name :varchar}}]])
+                                              :crux.sql.table/query '{:find [?id ?name ?age]
+                                                                      :where [[?id :name ?name]
+                                                                              [?id :age ?age]]}
+                                              :crux.sql.table/columns '{?id :keyword, ?name :varchar, ?age :bigint}}]])
 
 
 
@@ -141,9 +91,25 @@
 
 
 
-
+  ;; ---------- JDBC Query ----------- ;;
   (def conn (crux.calcite/jdbc-connection (crux-node)))
-  (map :name (query "SELECT NAME FROM PERSON" conn)))
+  (take 5 (query "SELECT NAME FROM PERSON" conn))
 
 
-;;; ERROR FOR missing column def
+
+
+
+
+
+
+
+
+
+
+  ;; ---------- Update Table Schema ----------- ;;
+  (crux/submit-tx (crux-node) [[:crux.tx/put {:crux.db/id :crux.sql.schema/employee
+                                              :crux.sql.table/name "employee"
+                                              :crux.sql.table/query '{:find [?id ?name ?salary]
+                                                                      :where [[?id :name ?name]
+                                                                              [?id :salary ?salary]]}
+                                              :crux.sql.table/columns '{?id :keyword, ?name :varchar, ?salary :bigint}}]]))

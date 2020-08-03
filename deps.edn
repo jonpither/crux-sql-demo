@@ -2,8 +2,8 @@
  :deps {
 
         ;; Crux dependencies
-        juxt/crux-rocksdb {:mvn/version "20.06-1.9.1-beta-SNAPSHOT"}
-        juxt/crux-sql {:mvn/version "20.06-1.9.1-alpha-SNAPSHOT"}
+        juxt/crux-rocksdb {:mvn/version "20.07-1.10.0-beta"}
+        juxt/crux-sql {:mvn/version "20.07-1.10.0-alpha"}
 
         ;; Other
         integrant {:mvn/version "0.8.0"}
