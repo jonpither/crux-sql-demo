@@ -1,9 +1,7 @@
 = Crux SQL Demo
 
 This is a demo project showcasing Crux SQL integration, as can be
-found in the video:
-
-video::HEBL_ue2wbw[youtube]
+found in the https://youtu.be/HEBL_ue2wbw[video].
 
 To play with the example code, start up a REPL against the `deps.edn`
 and `in-ns` to `juxt.sql-demo`. From there, run a system using
